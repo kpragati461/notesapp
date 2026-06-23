@@ -22,4 +22,24 @@ public class NoteService {
     public List<Note> getAllNotes() {
         return noteRepository.findAll();
     }
+    public Note getNoteById(Long id) {
+    return noteRepository.findById(id).orElse(null);
+    }
+
+    public Note updateNote(Long id, Note updatedNote) {
+    Note existingNote = noteRepository.findById(id).orElse(null);
+
+    if (existingNote == null) {
+        return null;
+    }
+
+    existingNote.setTitle(updatedNote.getTitle());
+    existingNote.setContent(updatedNote.getContent());
+
+    return noteRepository.save(existingNote);
+     
+}
+public void deleteNote(Long id) {
+    noteRepository.deleteById(id);
+}
 }
