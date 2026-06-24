@@ -1,6 +1,7 @@
 package com.don.notesapp.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -15,6 +16,9 @@ public class User {
     private String email;
 
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Note> notes;
 
     public User() {
     }
@@ -49,5 +53,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 }
