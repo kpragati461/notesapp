@@ -21,12 +21,15 @@ public class UserService implements UserDetailsService {
     }
 
     public void save(User user) {
-
         user.setPassword(
                 passwordEncoder.encode(user.getPassword())
         );
-
         userRepository.save(user);
+    }
+
+    // ← this method was missing
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Override

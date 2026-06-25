@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Register</title>
+    <title>Login</title>
 </head>
 <body>
 
-<h2>Create Account</h2>
+<h2>Login</h2>
 
-<form action="/register" method="post">
+<!-- Show error message if login failed -->
+<p th:if="${param.error}" style="color:red;">
+    Invalid username or password.
+</p>
+
+<!-- Show message after logout -->
+<p th:if="${param.logout}" style="color:green;">
+    You have been logged out.
+</p>
+
+<form action="/login" method="post">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
     <input type="text"
            name="username"
            placeholder="Username">
-
-    <br><br>
-
-    <input type="email"
-           name="email"
-           placeholder="Email">
 
     <br><br>
 
@@ -29,10 +33,13 @@
     <br><br>
 
     <button type="submit">
-        Register
+        Login
     </button>
 
 </form>
-<a href="/login">Already have an account? Login here</a>
+
+<br>
+<a href="/register">Don't have an account? Register here</a>
+
 </body>
 </html>

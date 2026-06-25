@@ -3,6 +3,8 @@ package com.don.notesapp.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name = "notes")
 public class Note {
@@ -16,6 +18,7 @@ public class Note {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @ManyToOne

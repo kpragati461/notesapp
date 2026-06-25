@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Notes</title>
+</head>
+<body>
+
+<h2>My Notes</h2>
+
+<!-- Logout -->
+<form action="/logout" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <button type="submit">Logout</button>
+</form>
+
+<br>
+
+<!-- Create Note Button -->
+<a href="/my-notes/create">+ Create New Note</a>
+
+<br><br>
+
+<!-- Notes List -->
+<div th:if="${notes.isEmpty()}">
+    <p>No notes yet. Create your first note!</p>
+</div>
+
+<div th:each="note : ${notes}">
+    <h3 th:text="${note.title}"></h3>
+    <p th:text="${note.content}"></p>
+    <small th:text="${note.createdAt}"></small>
+
+    <br>
+
+    <!-- Edit Button -->
+    <a th:href="@{/my-notes/edit/{id}(id=${note.id})}">Edit</a>
+
+    &nbsp;
+
+    <!-- Delete Button -->
+    <form th:action="@{/my-notes/delete/{id}(id=${note.id})}" method="post" style="display:inline;">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button type="submit" onclick="return confirm('Delete this note?')">Delete</button>
+    </form>
+
+    <hr>
+</div>
+
+</body>
+</html>

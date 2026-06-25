@@ -25,9 +25,7 @@ public class AuthController {
             @RequestParam String email,
             @RequestParam String password
     ) {
-
         User user = new User();
-
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
@@ -35,5 +33,10 @@ public class AuthController {
         userService.save(user);
 
         return "redirect:/login";
+    }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
     }
 }

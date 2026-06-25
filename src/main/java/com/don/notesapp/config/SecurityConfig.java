@@ -14,12 +14,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/register", "/notes/**").permitAll()
+                .requestMatchers("/login", "/register").permitAll()
                 .anyRequest().authenticated()
             )
-            .formLogin(form -> form.permitAll());
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/my-notes", true)
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+            );
 
         return http.build();
     }
