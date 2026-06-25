@@ -5,6 +5,7 @@ import com.don.notesapp.entity.User;
 import com.don.notesapp.exception.NoteNotFoundException;
 import com.don.notesapp.repository.NoteRepository;
 import com.don.notesapp.repository.UserRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -32,28 +33,36 @@ public class NoteService {
         return noteRepository.save(note);
     }
 
+    // ← now sorted by newest first
     public List<Note> getAllNotes() {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
-        return noteRepository.findByUser(user);
+        return noteRepository.findByUser(user,
+                Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 
-    // ← orElse(null) replaced with proper exception
+    // ← new search method
+    public List<Note> searchNotes(String keyword) {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        return noteRepository.findByUserAndTitleContainingIgnoreCase(
+                user, keyword, Sort.by(Sort.Direction.DESC, "createdAt"));
+    }
+
     public Note getNoteById(Long id) {
         return noteRepository.findById(id)
                 .orElseThrow(() -> new NoteNotFoundException(id));
     }
 
     public Note updateNote(Long id, Note updatedNote) {
-        // ← orElse(null) + null check replaced with exception
         Note existingNote = noteRepository.findById(id)
                 .orElseThrow(() -> new NoteNotFoundException(id));
-
         existingNote.setTitle(updatedNote.getTitle());
         existingNote.setContent(updatedNote.getContent());
-
         return noteRepository.save(existingNote);
     }
 

@@ -27,11 +27,22 @@ public class NoteViewController {
 
     // Show all notes for logged-in user
     @GetMapping
-    public String showNotes(Model model) {
-        List<Note> notes = noteService.getAllNotes();
-        model.addAttribute("notes", notes);
-        return "notes";
+public String showNotes(
+        @RequestParam(required = false) String keyword,
+        Model model) {
+
+    List<Note> notes;
+
+    if (keyword != null && !keyword.trim().isEmpty()) {
+        notes = noteService.searchNotes(keyword);
+        model.addAttribute("keyword", keyword);
+    } else {
+        notes = noteService.getAllNotes();
     }
+
+    model.addAttribute("notes", notes);
+    return "notes";
+}
 
     // Show create note form
     @GetMapping("/create")
