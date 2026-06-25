@@ -7,19 +7,31 @@
 
 <h2>Create New Note</h2>
 
-<form action="/my-notes/create" method="post">
+<form th:action="@{/my-notes/create}" th:object="${note}" method="post">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
     <input type="text"
-           name="title"
+           th:field="*{title}"
            placeholder="Note Title">
+
+    <!-- Title error -->
+    <span th:if="${#fields.hasErrors('title')}"
+          th:errors="*{title}"
+          style="color:red;">
+    </span>
 
     <br><br>
 
-    <textarea name="content"
+    <textarea th:field="*{content}"
               placeholder="Write your note here..."
               rows="6"
               cols="40"></textarea>
+
+    <!-- Content error -->
+    <span th:if="${#fields.hasErrors('content')}"
+          th:errors="*{content}"
+          style="color:red;">
+    </span>
 
     <br><br>
 
